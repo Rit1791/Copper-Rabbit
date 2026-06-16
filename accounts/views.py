@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
+from django.http import HttpResponse
 
-# Create your views here.
+def login_view(request):
+    return redirect("/accounts/github/login/")
+
+def home_view(request):
+    return HttpResponse("Copper Rabbit Dashboard")

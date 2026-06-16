@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'reviews',
     'github_app',
     'services',
+        'django.contrib.sites',
+
 ]
 
 MIDDLEWARE = [
@@ -134,3 +136,7 @@ STATIC_URL = 'static/'
 SITE_ID = 1
 GITHUB_CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
 GITHUB_CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_EMAIL_REQUIRED = False
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/accounts/login/"
