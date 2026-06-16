@@ -1,3 +1,33 @@
-from django.shortcuts import render
+import json
 
-# Create your views here.
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
+
+@csrf_exempt
+def github_webhook(request):
+    if request.method != "POST":
+        return JsonResponse(
+            {"error": "Only POST requests allowed"},
+            status=405
+        )
+
+    try:
+        payload = json.loads(request.body)
+        event = request.headers.get("X-GitHub-Event")
+        print(f"\nEVENT TYPE: {event}")
+
+
+        print("\n===== GITHUB WEBHOOK RECEIVED =====")
+        print(payload)
+        print("===================================\n")
+
+        return JsonResponse({"status": "success"})
+
+    except Exception as e:
+        print(f"Webhook Error: {e}")
+
+        return JsonResponse(
+            {"error": str(e)},
+            status=400
+        )
