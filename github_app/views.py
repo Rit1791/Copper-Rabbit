@@ -18,9 +18,29 @@ def github_webhook(request):
         print(f"\nEVENT TYPE: {event}")
 
 
-        print("\n===== GITHUB WEBHOOK RECEIVED =====")
-        print(payload)
-        print("===================================\n")
+        if event == "pull_request":
+            print("\n===== PULL REQUEST EVENT =====")
+
+            print("Action:", payload.get("action"))
+
+            print(
+                "Repository:",
+                payload["repository"]["full_name"]
+            )   
+            print(
+                "Title:",
+                payload["pull_request"]["title"]
+            )
+            print(
+                "Installation ID:",
+                payload["installation"]["id"]
+            )
+            print("==============================\n")
+        else:
+            print("\n===== GITHUB WEBHOOK RECEIVED =====")
+            print(payload)
+            print("===================================\n")
+
 
         return JsonResponse({"status": "success"})
 
