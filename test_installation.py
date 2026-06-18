@@ -1,0 +1,3 @@
+from github_app.github_client import get_installation_token
+
+get_installation_token()

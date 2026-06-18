@@ -28,6 +28,10 @@ def github_webhook(request):
                 payload["repository"]["full_name"]
             )   
             print(
+    "PR Number:",
+    payload["pull_request"]["number"]
+)
+            print(
                 "Title:",
                 payload["pull_request"]["title"]
             )
