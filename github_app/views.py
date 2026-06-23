@@ -7,6 +7,7 @@ from services.gemini_service import review_pr
 from github_app.comment_service import post_comment
 import hmac
 import hashlib
+from reviews.models import Review
 
 from django.conf import settings
 
@@ -93,7 +94,6 @@ def github_webhook(request):
                     "filename": file["filename"],
                     "patch": file.get("patch", "")
                 })
-            print("\nREVIEW DATA SUMMARY")
 
             print(f"\nReview Data Entries: {len(review_data)}")
             prompt = """
@@ -118,6 +118,11 @@ PR DIFF:
             final_prompt = prompt + review_text
             print("\nGENERATING GEMINI REVIEW...")
             review = review_pr(final_prompt)
+            Review.objects.create(
+                repository=f"{owner}/{repo}",
+                pr_number=pull_number,
+                review_text=review
+            )
             post_comment(
                 owner,
                 repo,

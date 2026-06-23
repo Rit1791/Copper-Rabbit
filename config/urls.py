@@ -8,4 +8,5 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
 
     path("github/", include("github_app.urls")),
+    path("", include("dashboard.urls")),
 ]

@@ -1,8 +1,13 @@
 from django.shortcuts import redirect
-from django.http import HttpResponse
+from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 
 def login_view(request):
     return redirect("/accounts/github/login/")
 
+@login_required
 def home_view(request):
-    return HttpResponse("Copper Rabbit Dashboard")
+    return render(
+        request,
+        "dashboard/home.html"
+    )
