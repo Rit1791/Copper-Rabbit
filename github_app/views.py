@@ -5,7 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from github_app.github_client import get_installation_token
 from services.gemini_service import review_pr
 from github_app.comment_service import post_comment
+import hmac
+import hashlib
 
+from django.conf import settings
 
 @csrf_exempt
 def github_webhook(request):
@@ -14,6 +17,8 @@ def github_webhook(request):
             {"error": "Only POST requests allowed"},
             status=405
         )
+    signature = request.headers.get("X-Hub-Signature-256")
+    print("Signature Present:", bool(signature))
 
     try:
         payload = json.loads(request.body)
