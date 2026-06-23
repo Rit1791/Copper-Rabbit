@@ -4,6 +4,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from github_app.github_client import get_installation_token
 from services.gemini_service import review_pr
+from github_app.comment_service import post_comment
+
 
 @csrf_exempt
 def github_webhook(request):
@@ -40,7 +42,7 @@ def github_webhook(request):
                 payload["installation"]["id"]
             )
             print("==============================\n")
-            owner=payload["repository"]["owner"]["login"]
+            owner = payload["repository"]["owner"]["login"]
             repo = payload["repository"]["name"]
             installation_id = payload["installation"]["id"]
             token_data = get_installation_token()
@@ -56,6 +58,7 @@ def github_webhook(request):
                 pull_number,
                 token
             )
+            print("Token Retrieved Successfully")
             print(f"\nTotal Files Changed: {len(files)}")
             review_data = []
             for file in files:
@@ -96,6 +99,14 @@ PR DIFF:
             final_prompt = prompt + review_text
             print("\nGEMINI FUNCTION IMPORT SUCCESSFUL")
             review = review_pr(final_prompt)
+            post_comment(
+                owner,
+                repo,
+                pull_number,
+                token,
+                review[:5000]
+            )
+
             print(f"\nReview Length: {len(review)}")
             print("\nGEMINI REVIEW GENERATED SUCCESSFULLY:")
             print(review[:300])
