@@ -45,7 +45,7 @@ def github_webhook(request):
             owner = payload["repository"]["owner"]["login"]
             repo = payload["repository"]["name"]
             installation_id = payload["installation"]["id"]
-            token_data = get_installation_token()
+            token_data = get_installation_token(installation_id)
             token = token_data["token"]
             pull_number = payload["pull_request"]["number"]
             print("Owner:", owner)

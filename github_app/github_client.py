@@ -4,10 +4,9 @@ from .auth import generate_app_jwt
 
 
 APP_ID = "4071149"
-INSTALLATION_ID = "140735937"
 
 
-def get_installation_token():
+def get_installation_token(installation_id):
     jwt_token = generate_app_jwt()
 
     headers = {
@@ -16,7 +15,7 @@ def get_installation_token():
     }
 
     response = requests.post(
-        f"https://api.github.com/app/installations/{INSTALLATION_ID}/access_tokens",
+        f"https://api.github.com/app/installations/{installation_id}/access_tokens",
         headers=headers,
     )
 
