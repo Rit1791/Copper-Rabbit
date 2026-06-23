@@ -1,8 +1,9 @@
 import json
-
+from github_app.pr_service import get_pr_files
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from github_app.github_client import get_installation_token
+from services.gemini_service import review_pr
 
 @csrf_exempt
 def github_webhook(request):
@@ -17,7 +18,6 @@ def github_webhook(request):
         event = request.headers.get("X-GitHub-Event")
         print(f"\nEVENT TYPE: {event}")
 
-
         if event == "pull_request":
             print("\n===== PULL REQUEST EVENT =====")
 
@@ -26,11 +26,11 @@ def github_webhook(request):
             print(
                 "Repository:",
                 payload["repository"]["full_name"]
-            )   
+            )
             print(
-    "PR Number:",
-    payload["pull_request"]["number"]
-)
+                "PR Number:",
+                payload["pull_request"]["number"]
+            )
             print(
                 "Title:",
                 payload["pull_request"]["title"]
@@ -40,11 +40,75 @@ def github_webhook(request):
                 payload["installation"]["id"]
             )
             print("==============================\n")
+            owner=payload["repository"]["owner"]["login"]
+            repo = payload["repository"]["name"]
+            installation_id = payload["installation"]["id"]
+            token_data = get_installation_token()
+            token = token_data["token"]
+            pull_number = payload["pull_request"]["number"]
+            print("Owner:", owner)
+            print("Repo:", repo)
+            print("Installation ID Variable:", installation_id)
+            print("Token Retrieved Successfully")
+            files = get_pr_files(
+                owner,
+                repo,
+                pull_number,
+                token
+            )
+            print(f"\nTotal Files Changed: {len(files)}")
+            review_data = []
+            for file in files:
+                print("\nFILE:", file["filename"])
+
+                print(
+                    "PATCH:",
+                    file.get("patch", "No patch available")
+                )
+                review_data.append({
+                    "filename": file["filename"],
+                    "patch": file.get("patch", "")
+                })
+            print("\nREVIEW DATA SUMMARY")
+
+            for item in review_data:
+                print(item["filename"])
+            print(f"\nReview Data Entries: {len(review_data)}")
+            prompt = """
+You are an expert senior software engineer.
+
+Review the following pull request diff.
+
+Identify:
+1. Bugs
+2. Security issues
+3. Performance issues
+4. Code quality improvements
+
+Provide concise actionable feedback.
+
+PR DIFF:
+"""
+            review_text = ""
+            for item in review_data:
+                review_text += f"\nFILE: {item['filename']}\n"
+                review_text += f"{item['patch']}\n"
+            final_prompt = prompt + review_text
+            print("\nGEMINI FUNCTION IMPORT SUCCESSFUL")
+            review = review_pr(final_prompt)
+            print(f"\nReview Length: {len(review)}")
+            print("\nGEMINI REVIEW GENERATED SUCCESSFULLY:")
+            print(review[:300])
+            # print(f"\nReview Text Length: {len(review_text)}")
+            # print("\nREVIEW TEXT PREVIEW")
+            # print(review_text[:500])
+            # print(f"\nFinal Prompt Length: {len(final_prompt)}")
+            # print("\nPROMPT PREVIEW")
+            # print(final_prompt[:300])
         else:
             print("\n===== GITHUB WEBHOOK RECEIVED =====")
             print(payload)
             print("===================================\n")
-
 
         return JsonResponse({"status": "success"})
 
