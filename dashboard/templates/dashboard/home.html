@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Copper Rabbit Dashboard</title>
+    <head>
+        <title>Copper Rabbit Dashboard</title>
 
-<style>
+        <style>
     body {
         font-family: Arial, sans-serif;
         max-width: 900px;
@@ -24,43 +24,51 @@
     border-radius: 8px;
 }
 </style>
-</head>
-<body>
-    
-    <h1>Copper Rabbit Dashboard</h1>
-    <p>Welcome, {{ request.user.username }}</p>
-    <p>
-    <a href="/accounts/logout/">
-        Logout
-    </a>
+    </head>
+    <body>
+
+        <h1>Copper Rabbit Dashboard</h1>
+        <p>Welcome, {{ request.user.username }}</p>
+        <p>
+            <a href="/accounts/logout/">
+                Logout
+            </a>
+        </p>
+
+        <hr>
+        <div class="cards">
+            <div class="card">
+                <h2>GitHub Status</h2>
+                <p>Connected ✅</p>
+            </div>
+
+            <div class="card">
+                <h2>Webhook Status</h2>
+                <p>Active ✅</p>
+            </div>
+
+            <div class="card">
+                <h2>Gemini Status</h2>
+                <p>Ready ✅</p>
+            </div>
+        </div>
+        <hr>
+
+        <div class="card">
+            <h2>Recent Reviews</h2>
+
+            {% for review in reviews %}
+            <p>
+    {{ review.repository }}
+    -
+    PR #{{ review.pr_number }}
+    -
+    {{ review.created_at|date:"M d, Y H:i" }}
 </p>
+            {% empty %}
+            <p>No reviews yet.</p>
+            {% endfor %}
+        </div>
 
-    <hr>
-<div class="cards"> 
-    <div class="card">
-    <h2>GitHub Status</h2>
-    <p>Connected ✅</p>
-</div>
-
-    <div class="card">
-    <h2>Webhook Status</h2>
-    <p>Active ✅</p>
-</div>
-
-   <div class="card">
-    <h2>Gemini Status</h2>
-    <p>Ready ✅</p>
-</div>
-</div>
-    <hr>
-
-<div class="card">
-    <h2>Recent Reviews</h2>
-
-    <p>PR #1</p>
-    <p>PR #2</p>
-    <p>PR #3</p>
-</div>
-
-</body>
+    </body>
 </html>

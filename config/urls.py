@@ -9,4 +9,5 @@ urlpatterns = [
 
     path("github/", include("github_app.urls")),
     path("", include("dashboard.urls")),
+    path("reviews/", include("reviews.urls")),
 ]
