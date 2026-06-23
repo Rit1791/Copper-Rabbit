@@ -19,6 +19,21 @@ def github_webhook(request):
         )
     signature = request.headers.get("X-Hub-Signature-256")
     print("Signature Present:", bool(signature))
+    if not signature:
+        return JsonResponse(
+            {"error": "Missing signature"},
+            status=401
+        )
+    expected_signature = "sha256=" + hmac.new(
+    settings.GITHUB_WEBHOOK_SECRET.encode(),
+    request.body,
+    hashlib.sha256
+    ).hexdigest()
+
+    print("Signature Match:", hmac.compare_digest(
+        signature,
+        expected_signature
+    ))
 
     try:
         payload = json.loads(request.body)
