@@ -34,6 +34,14 @@ def github_webhook(request):
         signature,
         expected_signature
     ))
+    if not hmac.compare_digest(
+        signature,
+        expected_signature
+    ):
+        return JsonResponse(
+            {"error": "Invalid signature"},
+            status=401
+        )
 
     try:
         payload = json.loads(request.body)
