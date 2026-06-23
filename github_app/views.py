@@ -97,7 +97,7 @@ PR DIFF:
                 review_text += f"\nFILE: {item['filename']}\n"
                 review_text += f"{item['patch']}\n"
             final_prompt = prompt + review_text
-            print("\nGEMINI FUNCTION IMPORT SUCCESSFUL")
+            print("\nGENERATING GEMINI REVIEW...")
             review = review_pr(final_prompt)
             post_comment(
                 owner,
@@ -107,9 +107,9 @@ PR DIFF:
                 review[:5000]
             )
 
-            print(f"\nReview Length: {len(review)}")
-            print("\nGEMINI REVIEW GENERATED SUCCESSFULLY:")
-            print(review[:300])
+            print(f"\nREVIEW GENERATED ({len(review)} characters)")
+            print("\nGEMINI REVIEW GENERATED SUCCESSFULLY")
+            print(f"Review Length: {len(review)}")
             # print(f"\nReview Text Length: {len(review_text)}")
             # print("\nREVIEW TEXT PREVIEW")
             # print(review_text[:500])
