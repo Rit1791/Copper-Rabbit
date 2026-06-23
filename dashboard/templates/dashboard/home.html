@@ -58,12 +58,14 @@
             <h2>Recent Reviews</h2>
 
             {% for review in reviews %}
-            <p>
-    {{ review.repository }}
-    -
-    PR #{{ review.pr_number }}
-    -
-    {{ review.created_at|date:"M d, Y H:i" }}
+          <p>
+    <a href="/reviews/{{ review.id }}/">
+        {{ review.repository }}
+        -
+        PR #{{ review.pr_number }}
+        -
+        {{ review.created_at|date:"M d, Y H:i" }}
+    </a>
 </p>
             {% empty %}
             <p>No reviews yet.</p>
