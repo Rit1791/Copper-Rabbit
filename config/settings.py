@@ -28,7 +28,13 @@ SECRET_KEY = 'django-insecure-7983dxf61c)qs9v8zn%rv+(iv5&g_z4esu%77gd+xu^e%_uxo2
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+GITHUB_WEBHOOK_SECRET = os.getenv("GITHUB_WEBHOOK_SECRET")
+
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "canopener-skies-compactor.ngrok-free.dev",
+]
 
 
 # Application definition
@@ -140,3 +146,4 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_EMAIL_REQUIRED = False
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/accounts/login/"
+LOGIN_URL = "/login/"

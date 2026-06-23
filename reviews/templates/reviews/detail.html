@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Review Details</title>
+</head>
+<body>
+
+    <h1>Review Details</h1>
+
+    <p>
+        <strong>Repository:</strong>
+        {{ review.repository }}
+    </p>
+
+    <p>
+        <strong>PR Number:</strong>
+        #{{ review.pr_number }}
+    </p>
+
+    <p>
+        <strong>Created:</strong>
+        {{ review.created_at|date:"M d, Y H:i" }}
+    </p>
+
+    <hr>
+
+    <h2>Gemini Review</h2>
+
+    <pre>{{ review.review_text }}</pre>
+
+</body>
+</html>
