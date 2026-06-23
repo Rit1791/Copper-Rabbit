@@ -24,9 +24,6 @@ def post_comment(owner, repo, pull_number, token, comment_body):
 
     print("\nCOMMENT API STATUS:", response.status_code)
 
-    try:
-        print(response.json())
-    except:
-        print(response.text)
+    print(f"COMMENT API STATUS: {response.status_code}")
 
     return response

@@ -19,8 +19,6 @@ def get_installation_token(installation_id):
         headers=headers,
     )
 
-    print("Status:", response.status_code)
-
-    print(response.json())
+    print(f"Installation Token Status: {response.status_code}")
 
     return response.json()

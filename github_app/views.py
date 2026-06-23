@@ -18,7 +18,7 @@ def github_webhook(request):
             status=405
         )
     signature = request.headers.get("X-Hub-Signature-256")
-    print("Signature Present:", bool(signature))
+    #print("Signature Present:", bool(signature))
     if not signature:
         return JsonResponse(
             {"error": "Missing signature"},
@@ -30,10 +30,10 @@ def github_webhook(request):
     hashlib.sha256
     ).hexdigest()
 
-    print("Signature Match:", hmac.compare_digest(
-        signature,
-        expected_signature
-    ))
+    # print("Signature Match:", hmac.compare_digest(
+    #     signature,
+    #     expected_signature
+    # ))
     if not hmac.compare_digest(
         signature,
         expected_signature
@@ -75,35 +75,26 @@ def github_webhook(request):
             installation_id = payload["installation"]["id"]
             token_data = get_installation_token(installation_id)
             token = token_data["token"]
-            pull_number = payload["pull_request"]["number"]
-            print("Owner:", owner)
-            print("Repo:", repo)
-            print("Installation ID Variable:", installation_id)
             print("Token Retrieved Successfully")
+            pull_number = payload["pull_request"]["number"]
+            
             files = get_pr_files(
                 owner,
                 repo,
                 pull_number,
                 token
             )
-            print("Token Retrieved Successfully")
             print(f"\nTotal Files Changed: {len(files)}")
             review_data = []
             for file in files:
                 print("\nFILE:", file["filename"])
 
-                print(
-                    "PATCH:",
-                    file.get("patch", "No patch available")
-                )
                 review_data.append({
                     "filename": file["filename"],
                     "patch": file.get("patch", "")
                 })
             print("\nREVIEW DATA SUMMARY")
 
-            for item in review_data:
-                print(item["filename"])
             print(f"\nReview Data Entries: {len(review_data)}")
             prompt = """
 You are an expert senior software engineer.
